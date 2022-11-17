@@ -19,8 +19,6 @@ def get_data(
     # user_input: User = Depends(),
     # user_token_data=Depends(get_user_by_token)
 ):
-    """Page can be seen if user registered and
-    header has  -H 'Authorization:bearer' and
-    -H 'client_secret:<user-token>"""
+    """"""
 
     return {"data": "user_token_data"}

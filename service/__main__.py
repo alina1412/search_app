@@ -1,11 +1,11 @@
 import uvicorn
-from fastapi import FastAPI
+
 
 from service.endpoints.put_handlers import api_router as put_routes
 from service.endpoints.get_handlers import api_router as get_routes
 from service.endpoints.data_handlers import api_router as data_routes
 
-app = FastAPI()
+from service.config import app
 
 app.include_router(put_routes)
 app.include_router(get_routes)
