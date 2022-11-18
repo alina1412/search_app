@@ -1,12 +1,11 @@
 from os import environ
-from fastapi import FastAPI
+
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from elasticsearch import AsyncElasticsearch, Elasticsearch, RequestError
+
 
 load_dotenv()
-key = environ.get("key")
-
-from elasticsearch import AsyncElasticsearch, RequestError
-from elasticsearch import Elasticsearch
 
 
 ELASTIC_PASSWORD = environ.get("ELASTIC_PASSWORD")

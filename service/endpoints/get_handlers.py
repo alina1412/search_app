@@ -1,24 +1,25 @@
+from elasticsearch import AsyncElasticsearch, RequestError
 from fastapi import APIRouter, Depends, status
+from starlette.requests import Request
 
+from service.schemas import UserInput
 
 api_router = APIRouter(
     prefix="/v1",
-    tags=["private"],
+    tags=["search"],
 )
 
 
 @api_router.post(
-    "/data",
+    "/all-data",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
         
     },
 )
-def get_data(
-    # user_input: User = Depends(),
-    # user_token_data=Depends(get_user_by_token)
-):
+async def get_all_users(request: Request):
     """"""
-
-    return {"data": "user_token_data"}
+    elastic_client: AsyncElasticsearch = request.app.state.elastic_client
+    res = elastic_client.search(index="users", query={"match_all": {}})
+    return {"success": True, "result": res}

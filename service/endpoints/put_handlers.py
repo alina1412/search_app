@@ -1,5 +1,9 @@
+from elasticsearch import AsyncElasticsearch, RequestError
 from fastapi import APIRouter, Depends, status
+from starlette.requests import Request
 
+from service.schemas import UserInput
+from service.utils.bulk_insert import bulk_insert
 
 api_router = APIRouter(
     prefix="/v1",
@@ -8,17 +12,56 @@ api_router = APIRouter(
 
 
 @api_router.post(
-    "/data2",
+    "/add-data",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
         
     },
 )
-def get_data2(
-    # user_input: User = Depends(),
-    # user_token_data=Depends(get_user_by_token)
+async def create_user(
+    request: Request,
+    user: UserInput
 ):
     """"""
+    elastic_client: AsyncElasticsearch = request.app.state.elastic_client
+    res = elastic_client.index(index="users", document=user.dict())
+    print(res)
+    return {"success": True, "result": res}
+ 
 
-    return {"data": "user_token_data"}
+
+insert_data = [
+    {
+  "name": "EEE",
+  "surname": "BBB",
+  "date_of_birth": "2022-11-18",
+  "interests": [
+    "III"
+  ]
+},
+    {
+  "name": "CCC",
+  "surname": "DDD",
+  "date_of_birth": "2022-11-18",
+},
+]
+
+
+@api_router.post(
+    "/add-bulk-data",
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
+        
+    },
+)
+async def create_many(
+    request: Request,
+):
+    """"""
+    try:
+        await bulk_insert(insert_data)
+    except Exception as exc:
+        ...
+    return {"success": True}

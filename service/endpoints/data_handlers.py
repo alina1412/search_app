@@ -1,10 +1,10 @@
+from elasticsearch import AsyncElasticsearch, RequestError
+from elasticsearch.exceptions import BadRequestError, NotFoundError
 from fastapi import APIRouter, Depends, status
 from starlette.requests import Request
-from service.config import app
 
-from elasticsearch import AsyncElasticsearch, RequestError
+from service.config import app
 from service.db.fake_db import MAPPING_FOR_INDEX
-from elasticsearch.exceptions import NotFoundError, BadRequestError
 
 api_router = APIRouter(
     prefix="/v1",
