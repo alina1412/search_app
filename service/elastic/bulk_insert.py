@@ -1,5 +1,3 @@
-# from elasticsearch import AsyncElasticsearch, RequestError
-
 from service.config import app
 from service.schemas import UserInput
 

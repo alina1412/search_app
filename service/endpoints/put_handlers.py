@@ -2,8 +2,8 @@ from elasticsearch import AsyncElasticsearch, RequestError
 from fastapi import APIRouter, Depends, status
 from starlette.requests import Request
 
+from service.elastic.bulk_insert import bulk_insert
 from service.schemas import UserInput
-from service.utils.bulk_insert import bulk_insert
 
 api_router = APIRouter(
     prefix="/v1",
