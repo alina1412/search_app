@@ -2,8 +2,8 @@ from elasticsearch import AsyncElasticsearch, RequestError
 from fastapi import APIRouter, Depends, status
 from starlette.requests import Request
 
-from service.elastic.search import get_all_users, get_matching
-from service.schemas import UserInput
+from service.elastic.search import get_all_users, get_matching_by_message
+
 
 api_router = APIRouter(
     prefix="/v1",
@@ -11,7 +11,7 @@ api_router = APIRouter(
 )
 
 
-@api_router.post(
+@api_router.get(
     "/all-data",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
@@ -23,7 +23,7 @@ async def get_all_users_handler(request: Request):
     return await get_all_users(request)
 
 
-@api_router.post(
+@api_router.get(
     "/match-data",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
@@ -32,4 +32,4 @@ async def get_all_users_handler(request: Request):
 )
 async def get_matching_handler(query: str, request: Request):
     """"""
-    return await get_matching(query, request)
+    return await get_matching_by_message(query, request)

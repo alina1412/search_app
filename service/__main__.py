@@ -1,8 +1,8 @@
 import uvicorn
 
 from service.config import app
-from service.endpoints.data_handlers import api_router as data_routes
 from service.endpoints.get_handlers import api_router as get_routes
+from service.endpoints.index_handlers import api_router as data_routes
 from service.endpoints.put_handlers import api_router as put_routes
 
 app.include_router(put_routes)

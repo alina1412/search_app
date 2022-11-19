@@ -1,7 +1,15 @@
 # fmt: off
 MAPPING_FOR_INDEX = {
             "properties": {
-                "name": {
+                "id": {
+                    "type": "integer",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "message": {
                     "type": "text",
                     "fields": {
                         "keyword": {
@@ -9,25 +17,6 @@ MAPPING_FOR_INDEX = {
                         }
                     }
                 },
-                "surname": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
-                },
-                "date_of_birth": {
-                    "type": "date"
-                },
-                "interests": {
-                    "type": "text",
-                    "fields": {
-                        "keyword": {
-                            "type": "keyword"
-                        }
-                    }
-                }
             }
         }
 # fmt: on

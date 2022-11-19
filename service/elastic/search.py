@@ -1,13 +1,16 @@
 from elasticsearch import AsyncElasticsearch
-from starlette.requests import Request
 from elasticsearch.exceptions import NotFoundError
+from starlette.requests import Request
 
 
 async def get_all_users(request: Request):
     """"""
-    elastic_client: AsyncElasticsearch = request.app.state.elastic_client
-    res = elastic_client.search(index="users", query={"match_all": {}})
-    return {"success": True, "result": res}
+    try:
+        elastic_client: AsyncElasticsearch = request.app.state.elastic_client
+        res = elastic_client.search(index="users", query={"match_all": {}})
+        return {"success": True, "result": res}
+    except NotFoundError:
+        return "No such index to search"
 
 
 searching = {
@@ -26,7 +29,7 @@ searching = {
 }
 
 
-async def get_matching(query: str, request: Request):
+async def get_matching_by_message(query: str, request: Request):
     """"""
     searching["query"]["match"]["message"]["query"] = query
     # fmt: off

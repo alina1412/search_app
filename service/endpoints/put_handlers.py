@@ -5,20 +5,21 @@ from starlette.requests import Request
 from service.elastic.bulk_insert import bulk_insert
 from service.schemas import UserInput
 
+
 api_router = APIRouter(
     prefix="/v1",
-    tags=["private"],
+    tags=["data"],
 )
 
 
-@api_router.post(
+@api_router.put(
     "/add-data",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
     },
 )
-async def create_user(request: Request, user: UserInput):
+async def create_data_handler(request: Request, user: UserInput):
     """"""
     elastic_client: AsyncElasticsearch = request.app.state.elastic_client
     res = elastic_client.index(index="users", document=user.dict())
@@ -28,12 +29,14 @@ async def create_user(request: Request, user: UserInput):
 
 insert_data = [
     {
+        "id": 1,
         "name": "EEE",
         "surname": "BBB",
         "date_of_birth": "2022-11-18",
         "interests": ["III"],
     },
     {
+        "id": 2,
         "name": "CCC",
         "surname": "DDD",
         "date_of_birth": "2022-11-18",
@@ -41,14 +44,14 @@ insert_data = [
 ]
 
 
-@api_router.post(
+@api_router.put(
     "/add-bulk-data",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
     },
 )
-async def create_many(
+async def create_many_handler(
     request: Request,
 ):
     """"""
