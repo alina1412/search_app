@@ -15,7 +15,6 @@ api_router = APIRouter(
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
-        
     },
 )
 async def get_all_users(request: Request):

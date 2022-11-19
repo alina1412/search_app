@@ -3,12 +3,11 @@ from elasticsearch.exceptions import BadRequestError, NotFoundError
 from fastapi import APIRouter, Depends, status
 from starlette.requests import Request
 
-from service.config import app
-from service.db.fake_db import MAPPING_FOR_INDEX
+from service.db.mapping import MAPPING_FOR_INDEX
 
 api_router = APIRouter(
     prefix="/v1",
-    tags=["private"],
+    tags=["indexes"],
 )
 
 
@@ -17,7 +16,6 @@ api_router = APIRouter(
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
-        
     },
 )
 async def create_index(
@@ -30,8 +28,8 @@ async def create_index(
         elastic_client: AsyncElasticsearch = request.app.state.elastic_client
         elastic_client.indices.create(index="users", mappings=MAPPING_FOR_INDEX)
     except BadRequestError as exc:
-        if exc.error == 'resource_already_exists_exception':
-            return {'resource_already_exists_exception'}
+        if exc.error == "resource_already_exists_exception":
+            return {"resource_already_exists_exception"}
         else:
             print("sometihg else")
             assert exc == ""
@@ -43,7 +41,6 @@ async def create_index(
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
-        
     },
 )
 async def delete_index(
@@ -55,7 +52,7 @@ async def delete_index(
     try:
         elastic_client: AsyncElasticsearch = request.app.state.elastic_client
         elastic_client.indices.delete(index="users")
-    
+
         return {"success": True}
     except NotFoundError:
-        return ("No index to delete")
+        return "No index to delete"

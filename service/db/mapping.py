@@ -1,3 +1,4 @@
+# fmt: off
 MAPPING_FOR_INDEX = {
             "properties": {
                 "name": {
@@ -29,3 +30,4 @@ MAPPING_FOR_INDEX = {
                 }
             }
         }
+# fmt: on
