@@ -5,7 +5,8 @@ __pycache__/
 .vscode
 .pytest_cache
 .database_data/*
-migrations/*
 htmlcov/*
 .coverage
 example_*
+
+**/posts.csv
