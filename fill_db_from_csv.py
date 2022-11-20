@@ -11,7 +11,7 @@ from service.db.models import Documents
 
 def get_tuple_from_csv():
     """['text,created_date,rubrics']"""
-    with open("posts.csv", "r", newline="") as csvfile:
+    with open("posts.csv", "r", newline="", encoding="utf-8") as csvfile:
         docreader = csv.reader(csvfile)
         next(docreader)
         for row in docreader:
