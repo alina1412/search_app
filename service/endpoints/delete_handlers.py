@@ -20,16 +20,16 @@ api_router = APIRouter(
 )
 async def delete_one_handler(
     request: Request,
-    id: int,
-    index_name: str = "users",
+    doc_id: int,
+    index_name: str = "map",
 ):
     """"""
     try:
-        await doc_delete_from_index(index_name, id)
+        await doc_delete_from_index(index_name, doc_id)
     except NotFoundError:
         return {"nothing to delete"}
     except Exception as exc:
         print(exc)
         return {"some error during deletion"}
-    await delete_doc_from_db(id)
+    await delete_doc_from_db(doc_id)
     # return response

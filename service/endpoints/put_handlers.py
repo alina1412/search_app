@@ -5,7 +5,6 @@ from starlette.requests import Request
 from service.elastic.bulk_insert import bulk_insert
 from service.schemas import UserInput
 
-
 api_router = APIRouter(
     prefix="/v1",
     tags=["data"],
@@ -31,14 +30,14 @@ insert_data = [
     {
         "id": 1,
         "name": "EEE",
-        "surname": "BBB",
+        "message": "comprehend conditions is greatest adventure",
         "date_of_birth": "2022-11-18",
         "interests": ["III"],
     },
     {
         "id": 2,
         "name": "CCC",
-        "surname": "DDD",
+        "message": "adventurous time is a greatefull comprehension",
         "date_of_birth": "2022-11-18",
     },
 ]
