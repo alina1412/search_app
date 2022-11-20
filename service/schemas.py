@@ -9,3 +9,9 @@ class UserInput(BaseModel):
     surname: Optional[str]
     date_of_birth: Optional[date]
     interests: Optional[list[str]]
+
+
+class TextInput(BaseModel):
+    id: int
+    message: str
+    
