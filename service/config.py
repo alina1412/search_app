@@ -7,8 +7,10 @@ from fastapi import FastAPI
 load_dotenv()
 
 
-ELASTIC_PASSWORD = environ.get("ELASTIC_PASSWORD")
-assert ELASTIC_PASSWORD
+elastic_password = environ.get("ELASTIC_PASSWORD")
+assert elastic_password
+
+elastic_index = environ.get("ELASTIC_INDEX")
 
 
 class DBConfig:
@@ -21,7 +23,7 @@ class DBConfig:
 
 elastic_client = Elasticsearch(
     "http://localhost:9200",
-    basic_auth=("elastic", ELASTIC_PASSWORD),
+    basic_auth=("elastic", elastic_password),
 )
 
 # print(elastic_client.info())
