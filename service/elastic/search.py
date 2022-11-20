@@ -28,12 +28,12 @@ async def prepare_id_of_results(results) -> list[int]:
     return id_res
 
 
-async def get_all_users(request: Request):
-    """"""
+async def get_all_by_index(request: Request, index: str):
+    """get docs from elastic by index"""
     try:
         elastic_client: AsyncElasticsearch = request.app.state.elastic_client
-        res = elastic_client.search(index="users", query={"match_all": {}})
-        return {"success": True, "result": res}
+        res = elastic_client.search(index=index, query={"match_all": {}})
+        return {"success": True, "result": await prepare_results(res)}
     except NotFoundError:
         return "No such index to search"
 
@@ -54,21 +54,20 @@ searching = {
 }
 
 
-async def get_matching_by_message(query: str, request: Request):
-    """"""
-    index_name = "map"
-    searching["size"] = 20
-    searching["rescore"]["window_size"] = 20
-    searching["query"]["match"]["message"]["query"] = query
+async def get_matching_by_message(params: dict, request: Request):
+    """search docs by field 'message' in mapping of elastic"""
+    index_name = params["index_name"]
+    searching["size"] = params["size"]
+    searching["rescore"]["window_size"] = params["size"]
+    searching["query"]["match"]["message"]["query"] = params["query"]
     # fmt: off
-    searching["rescore"]["query"]["rescore_query"]["match_phrase"]["message"]["query"] = query
+    searching["rescore"]["query"]["rescore_query"]["match_phrase"]["message"]["query"] = params["query"]
     # fmt: on
 
     try:
         elastic_client: AsyncElasticsearch = request.app.state.elastic_client
         res = elastic_client.search(index=index_name, body=searching)
         return {
-            "success": True,
             "result": await prepare_results(res),
             "ids": await prepare_id_of_results(res),
         }
