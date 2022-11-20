@@ -61,7 +61,7 @@ async def get_matching_dict(index_name, searching, request) -> dict:
 
 async def get_matching_by_message(
     params: dict, request: Request, session: AsyncSession
-):
+) -> dict:
     """search docs by field 'message' in mapping of elastic"""
     searching = await prepare_searchng_query(params)
     index_name = params["index_name"]
