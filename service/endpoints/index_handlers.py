@@ -9,7 +9,7 @@ api_router = APIRouter(
 )
 
 
-@api_router.post(
+@api_router.put(
     "/create-index",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
@@ -21,7 +21,7 @@ async def create_index_handler(request: Request, index_name: str = "users"):
     return await create_index(request, index_name)
 
 
-@api_router.post(
+@api_router.delete(
     "/delete-index",
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},

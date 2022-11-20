@@ -9,20 +9,14 @@ async def doc_delete(index_name, id):
 
 
 async def doc_delete_from_index(index_name, id):
+    """id - manual from schema"""
     query = {"query": {"term": {"id": id}}}
-
-    try:
-        res = app.state.elastic_client.search(index=index_name, body=query)
-        # id = res.get("hits", {}).get("hits", [{}])[0].get("_source", {}).get("id")
-        hits = res.get("hits", {}).get("hits", [{}])
-        if hits:
-            inner_id = hits[0].get("_id")
-        elif not hits:
-            return {"nothing to delete"}
-        if not inner_id:
-            return {"nothing to delete"}
-
-        app.state.elastic_client.delete(index=index_name, id=inner_id)
-    except NotFoundError:
-        return {"nothing to delete"}
-    return {"ok"}
+    res = app.state.elastic_client.search(index=index_name, body=query)
+    # id = res.get("hits", {}).get("hits", [{}])[0].get("_source", {}).get("id")
+    hits = res.get("hits", {}).get("hits", [{}])
+    if not hits:
+        raise NotFoundError
+    inner_id = hits[0].get("_id")
+    if not inner_id:
+        raise NotFoundError
+    app.state.elastic_client.delete(index=index_name, id=inner_id)

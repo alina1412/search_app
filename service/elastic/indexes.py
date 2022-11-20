@@ -2,14 +2,16 @@ from elasticsearch import AsyncElasticsearch
 from elasticsearch.exceptions import BadRequestError, NotFoundError
 from starlette.requests import Request
 
-from service.elastic.mapping import MAPPING_FOR_INDEX
+from service.elastic.mapping import MAPPING_FOR_INDEX, elastic_text_settings
 
 
 async def create_index(request: Request, index_name: str):
     """"""
     try:
         elastic_client: AsyncElasticsearch = request.app.state.elastic_client
-        elastic_client.indices.create(index=index_name, mappings=MAPPING_FOR_INDEX)
+        elastic_client.indices.create(
+            index=index_name, mappings=MAPPING_FOR_INDEX, settings=elastic_text_settings
+        )
     except BadRequestError as exc:
         if exc.error == "resource_already_exists_exception":
             return {"resource_already_exists_exception"}

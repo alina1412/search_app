@@ -1,9 +1,9 @@
+from elasticsearch.exceptions import NotFoundError
 from fastapi import APIRouter, status
 from starlette.requests import Request
 
 from service.elastic.doc_delete import doc_delete_from_index
 from service.utils.logic import delete_doc_from_db
-
 
 api_router = APIRouter(
     prefix="/v1",
@@ -20,10 +20,16 @@ api_router = APIRouter(
 )
 async def delete_one_handler(
     request: Request,
-    id,
+    id: int,
     index_name: str = "users",
 ):
     """"""
-    response = await doc_delete_from_index(index_name, id)
+    try:
+        await doc_delete_from_index(index_name, id)
+    except NotFoundError:
+        return {"nothing to delete"}
+    except Exception as exc:
+        print(exc)
+        return {"some error during deletion"}
     await delete_doc_from_db(id)
-    return response
+    # return response
