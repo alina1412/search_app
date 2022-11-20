@@ -18,7 +18,7 @@ def get_tuple_from_csv():
             yield row
 
 
-async def fill():
+async def fill_db():
     engine = create_async_engine(async_database_uri(), echo=True, future=True)
     async with engine.connect() as session:
         for text, created_date, rubrics in get_tuple_from_csv():
@@ -37,6 +37,6 @@ if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
-        asyncio.run(fill())
+        asyncio.run(fill_db())
     except KeyboardInterrupt:
         pass
