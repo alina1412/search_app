@@ -1,4 +1,3 @@
-from elasticsearch.exceptions import NotFoundError
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,6 +15,7 @@ api_router = APIRouter(
 
 @api_router.delete(
     "/delete-data",
+    status_code=status.HTTP_204_NO_CONTENT,
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "Nothing to delete"},
@@ -32,8 +32,8 @@ async def delete_one_handler(
     await delete_doc_from_db(doc_id, session)
     try:
         await doc_delete_from_index(index_name, doc_id)
-    except NotInElastic:
-        raise HTTPException(404, detail="nothing to delete")
+    except NotInElastic as exc:
+        raise HTTPException(404, detail="nothing to delete") from exc
     except Exception as exc:
         print(exc)
-        return HTTPException(503, detail="some error during deletion")
+        raise HTTPException(503, detail="some error during deletion") from exc

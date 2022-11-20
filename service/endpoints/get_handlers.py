@@ -16,6 +16,7 @@ api_router = APIRouter(
 
 @api_router.get(
     "/match-data",
+    status_code=status.HTTP_200_OK,
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Bad request"},
@@ -37,4 +38,4 @@ async def get_matching_handler(
         res = await get_matching_by_message(params, request, session)
         return res
     except NoIndex:
-        return HTTPException(500, f"No such index '{elastic_index}' to search")
+        raise HTTPException(500, f"No such index '{elastic_index}' to search")
