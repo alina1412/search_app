@@ -1,5 +1,5 @@
 # fmt: off
-MAPPING_FOR_INDEX = {
+mapping_for_index = {
             "properties": {
                 "id": {
                     "type": "integer",
