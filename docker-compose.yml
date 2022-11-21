@@ -27,7 +27,7 @@ services:
     networks:
       - elastic
     ports:
-      - 9201:9200  
+      - ${ELASTIC_H_PORT}:9200  
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
