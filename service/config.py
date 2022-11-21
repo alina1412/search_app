@@ -11,7 +11,7 @@ elastic_password = environ.get("ELASTIC_PASSWORD")
 assert elastic_password
 
 elastic_index = environ.get("ELASTIC_INDEX")
-
+elastic_url= environ.get("ELASTIC_URL")
 
 class DBConfig:
     DATABASE_NAME: str = environ.get("DATABASE_NAME")
@@ -22,7 +22,7 @@ class DBConfig:
 
 
 elastic_client = Elasticsearch(
-    "http://localhost:9200",
+    elastic_url,
     basic_auth=("elastic", elastic_password),
 )
 
