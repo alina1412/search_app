@@ -5,12 +5,12 @@ from service.db.crud import db_delete
 from service.db.models import Documents
 
 
-async def delete_doc_from_db(id: int, session: AsyncSession):
+async def delete_doc_from_db(id: int, session: AsyncSession) -> None:
     await db_delete(session, Documents, (Documents.id == id,))
     await session.commit()
 
 
-async def select_from_db_by_ids(lst, session):
+async def select_from_db_by_ids(lst: list[int], session: AsyncSession) -> list:
     query = (
         select(Documents)
         .where(Documents.id.in_(lst))
