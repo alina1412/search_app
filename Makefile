@@ -43,8 +43,8 @@ alembic-down:
 	poetry run alembic -c alembic.ini downgrade -1
 
 lint:
-	poetry run isort service
-	poetry run black service
+	poetry run isort service tests
+	poetry run black service tests
 	poetry run pylint service
 
 req:
