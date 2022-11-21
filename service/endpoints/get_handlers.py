@@ -37,5 +37,5 @@ async def get_matching_handler(
     try:
         res = await get_matching_by_message(params, request, session)
         return res
-    except NoIndex:
-        raise HTTPException(500, f"No such index '{elastic_index}' to search")
+    except NoIndex as exc:
+        raise HTTPException(500, f"No such index '{elastic_index}' to search") from exc
