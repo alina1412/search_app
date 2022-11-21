@@ -37,6 +37,7 @@ initial data of a given structure from csv doc, and then creates and fills index
 - docker-compose
 - makefile
 - poetry
+- pytest
 
 # The Task branch
 - the app has two handlers: 

@@ -19,6 +19,7 @@ dotenv.load_dotenv()
 
 
 def run_alembic_up(uri_test) -> None:
+    """makes migrations for empty db"""
     alembic_config = AlembicConfig(file_="alembic.ini")
     try:
         alembic_downgrade(alembic_config, "base")
@@ -36,6 +37,7 @@ def run_alembic_down() -> None:
 
 
 def make_test_db() -> None:
+    """creates db based on sync uri"""
     if not database_exists(sync_database_uri()):
         create_database(sync_database_uri())
 
@@ -48,6 +50,7 @@ def drop_test_db() -> None:
 
 @pytest.fixture(scope="session")
 def get_test_db_uri() -> Generator[str, Any, Any]:
+    """makes separated db for tests, drops it after if not in debug"""
     os.environ["DATABASE_NAME"] = "pytest1"
     uri_test = async_database_uri()
     make_test_db()
@@ -65,7 +68,6 @@ async def get_test_session(get_test_db_uri) -> Generator[sessionmaker, None, Non
         yield session
 
 
-# Fixture for test client.
 @pytest.fixture(name="client", scope="session")
 def fixture_client() -> TestClient:
     with TestClient(app) as client:
