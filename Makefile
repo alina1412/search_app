@@ -4,10 +4,10 @@ run:
 alembic_up = make alembic-up
 
 ifdef OS
-	docker_up = docker compose up -d
+	docker_up = docker compose up -d --build
 	docker_down = docker compose down
 else
-	docker_up = sudo docker-compose up -d
+	docker_up = sudo docker-compose up -d --build
 	docker_down = sudo docker-compose down
 endif
 
