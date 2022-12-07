@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 
 from service.elastic.errors import NoIndex
-from service.utils.logic import select_from_db_by_ids
+from service.utils.logic import select_from_db_by_id
 
 
 async def prepare_results(results) -> list[dict]:
@@ -32,7 +32,7 @@ async def prepare_id_of_results(results) -> list[int]:
     return id_res
 
 
-async def prepare_searchng_query(params) -> dict:
+async def prepare_searching_query(params) -> dict:
     searching = {
         "size": params["size"],
         "query": {"match": {"message": {"operator": "or", "query": params["query"]}}},
@@ -63,9 +63,11 @@ async def get_matching_by_message(
     params: dict, request: Request, session: AsyncSession
 ) -> dict:
     """search docs by field 'message' in mapping of elastic"""
-    searching = await prepare_searchng_query(params)
+    searching = await prepare_searching_query(params)
     index_name = params["index_name"]
     res_from_elastic = await get_matching_dict(index_name, searching, request)
     ids = await prepare_id_of_results(res_from_elastic)
-    data = await select_from_db_by_ids(ids, session)
+    data = []
+    for id_ in ids:
+        data.extend(await select_from_db_by_id(id_, session))
     return {"data": data}

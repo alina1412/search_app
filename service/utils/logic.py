@@ -10,12 +10,7 @@ async def delete_doc_from_db(id: int, session: AsyncSession) -> None:
     await session.commit()
 
 
-async def select_from_db_by_ids(lst: list[int], session: AsyncSession) -> list:
-    query = (
-        select(Documents)
-        .where(Documents.id.in_(lst))
-        .order_by(Documents.created_date)
-        .limit(20)
-    )
+async def select_from_db_by_id(id_: int, session: AsyncSession) -> list:
+    query = select(Documents).where(Documents.id == id_)
     results = (await session.execute(query)).all()
     return list(results)
