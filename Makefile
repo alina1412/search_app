@@ -48,4 +48,7 @@ lint:
 	poetry run pylint service
 
 req:
-	poetry export -f requirements.txt --without-hashes --without dev --output requirements.txt
+	poetry export -f requirements.txt --without-hashes --with dev --output requirements.txt
+
+req-without-dev:
+	poetry export -f requirements.txt --without-hashes --without dev --output service/requirements.txt

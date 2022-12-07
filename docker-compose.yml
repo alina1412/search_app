@@ -4,53 +4,60 @@ services:
   database:
     image: 'postgres:latest'
     container_name: 'doc_storage'
-
     environment:
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=${DATABASE_NAME}
     ports:
       - ${POSTGRES_PORT}:5432
-
     volumes:
       - ./.database_data:/var/lib/postgresql/data
 
   elasticsearch:
-    container_name: es-container
+    container_name: elastic-container
     image: elasticsearch:8.5.1
+    restart: always
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    networks:
-      - elastic
+    healthcheck:
+      test: curl -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 8s
+      timeout: 5s
+      retries: 10
     ports:
       - ${ELASTIC_H_PORT}:9200  
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
-  # app:
-    # container_name: ${DOCKER_APP_NAME}
-    # build: ./service
+  app:
+    container_name: ${DOCKER_APP_NAME}
+    build: ./service
+    image: search-app
+    restart: always
+    environment:
+      - POSTGRES_HOST=database
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_PORT=5432
 
-    # environment:
-    #   - POSTGRES_HOST=database
-    #   - DATABASE_NAME=${DATABASE_NAME}
-    #   - DATABASE_USERNAME=${DATABASE_USERNAME}
-    #   - POSTGRES_PORT=5432
-    #   - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-    #   - APP_PORT=${APP_PORT}
-    # ports:
-    #   - 8765:${APP_PORT}
-    # depends_on:
-    #   - database
+      - ELASTIC_INDEX=${ELASTIC_INDEX}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_URL=http://elasticsearch
+      - ELASTIC_H_PORT=9200
+    ports:
+      - 8765:8000
+    depends_on:
+      database:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
 
 
-networks:
-  elastic:
-    driver: bridge
 volumes:
   .database_data:
   elasticsearch-data:
