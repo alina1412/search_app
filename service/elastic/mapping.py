@@ -1,4 +1,4 @@
-#fmt: off
+# fmt: off
 
 mapping_for_index = {
     "properties": {
@@ -38,4 +38,4 @@ elastic_text_settings = {
         }
     }
 }
-#fmt: on
+# fmt: on

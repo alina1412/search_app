@@ -11,8 +11,9 @@ elastic_password = environ.get("ELASTIC_PASSWORD")
 assert elastic_password
 
 elastic_index = environ.get("ELASTIC_INDEX")
-elastic_url= environ.get("ELASTIC_URL")
-elastic_host_port= environ.get("ELASTIC_H_PORT")
+elastic_url = environ.get("ELASTIC_URL")
+elastic_host_port = environ.get("ELASTIC_H_PORT")
+
 
 class DBConfig:
     DATABASE_NAME: str = environ.get("DATABASE_NAME")

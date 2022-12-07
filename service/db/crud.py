@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Any, Dict, Type
 
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,7 +7,7 @@ from service.db.models import DeclarativeBase
 
 
 async def db_insert(
-    session: AsyncSession, model: Type[DeclarativeBase], dict_data
+    session: AsyncSession, model: Type[DeclarativeBase], dict_data: Dict[str, Any]
 ) -> None:
     query = insert(model).values(**dict_data)
     await session.execute(query)
