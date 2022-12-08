@@ -4,20 +4,26 @@ run:
 alembic_up = make alembic-up
 
 ifdef OS
-	docker_up = docker compose up -d --build
+	docker_build = docker compose up -d --build
 	docker_down = docker compose down
 else
-	docker_up = sudo docker-compose up -d --build
+	docker_build = sudo docker-compose up -d --build
 	docker_down = sudo docker-compose down
 endif
 
-up:
-	$(docker_up) 
+build:
+	$(docker_build) 
 	$(alembic_up)
 
 down:
 	$(docker_down)
 
+logs:
+	docker-compose logs
+
+app:
+	docker-compose build app
+	docker-compose up -d app
 
 
 test-sync:

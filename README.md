@@ -5,8 +5,7 @@ Educational FastApi project with elasticsearch
 
 
 ## How to run locally
-(...supposing the elasticsearch is installed and started)
-- put variables into .env (as well as ELASTIC_PASSWORD)
+- put variables into .env (as well as elastic credentials)
 - create virtual environment:
 >... if using poetry
 > - poety install
@@ -17,7 +16,7 @@ Educational FastApi project with elasticsearch
 > - activate virtual environment
 > - pip install -r requirenments.txt
 
-- `make up`: makes docker-compose up and runs migrations
+- `make build`: builds docker containers, runs it and runs migrations
 
 > first separated scripts: 
 1. fill_db_from_csv.py
@@ -25,7 +24,7 @@ Educational FastApi project with elasticsearch
 
 (for the *task* it fills db with 
 initial data of a given structure from csv doc, and then creates and fills index from initial db data)
-- `make run`: runs a FastApi app
+if to run a FastApi app locally: - `make run` (but it can be ran in docker)
 
 
 ## Tools
