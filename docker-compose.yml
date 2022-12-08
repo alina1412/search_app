@@ -46,9 +46,10 @@ services:
       - POSTGRES_PORT=5432
 
       - ELASTIC_INDEX=${ELASTIC_INDEX}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ELASTIC_URL=http://elasticsearch
+      - ELASTIC_HOST=elasticsearch
       - ELASTIC_H_PORT=9200
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
       - 8765:8000
     depends_on:

@@ -2,7 +2,7 @@ import asyncio
 from elasticsearch import AsyncElasticsearch
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from service.config import elastic_index, app
+from service.config import app, econf
 from service.db.crud import db_select
 from service.db.db_settings import async_database_uri
 from service.db.models import Documents
@@ -14,7 +14,7 @@ async def create_index_for_docs():
     try:
         elastic_client: AsyncElasticsearch = app.state.elastic_client
         elastic_client.indices.create(
-            index=elastic_index,
+            index=econf.elastic_index,
             mappings=mapping_for_index,
             settings=elastic_text_settings,
         )
@@ -24,7 +24,7 @@ async def create_index_for_docs():
 
 async def if_doc_with_id_exists(id_):
     result = app.state.elastic_client.search(
-        index=elastic_index, query={"term": {"id": id_}}
+        index=econf.elastic_index, query={"term": {"id": id_}}
     )
     items = result.get("hits", {}).get("hits", [{}])
     if len(items) > 0:
@@ -36,7 +36,7 @@ async def if_doc_with_id_exists(id_):
 
 async def elastic_insert(insert_data: TextInput):
     if not await if_doc_with_id_exists(insert_data.id):
-        app.state.elastic_client.index(index=elastic_index, document=insert_data.dict())
+        app.state.elastic_client.index(index=econf.elastic_index, document=insert_data.dict())
 
 
 async def fill_from_db():
@@ -56,7 +56,7 @@ async def fill_from_db():
         for id_, message in data:
             item = TextInput(id=id_, message=message)
             await elastic_insert(item)
-            # break
+            
 
 
 if __name__ == "__main__":
