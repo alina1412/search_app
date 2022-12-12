@@ -3,7 +3,7 @@ from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 
-from service.config import elastic_index
+from service.config import econf
 from service.db.db_settings import get_session
 from service.elastic.errors import NoIndex
 from service.elastic.search import get_matching_by_message
@@ -25,7 +25,7 @@ api_router = APIRouter(
 )
 async def get_matching_handler(
     request: Request,
-    query: str = Query(default="", min_length=2),
+    query: str = Query(default="", min_length=2, description="search query"),
     session: AsyncSession = Depends(get_session),
 ):
     """gets matching docs from elastic by query,
@@ -33,9 +33,9 @@ async def get_matching_handler(
     if not query.strip():
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="nothing to search")
 
-    params = {"query": query, "size": 20, "index_name": elastic_index}
+    params = {"query": query, "size": econf.elastic_size, "index_name": econf.elastic_index}
     try:
         res = await get_matching_by_message(params, request, session)
         return res
     except NoIndex as exc:
-        raise HTTPException(500, f"No such index '{elastic_index}' to search") from exc
+        raise HTTPException(500, f"No such index '{econf.elastic_index}' to search") from exc

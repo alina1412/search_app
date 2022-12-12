@@ -7,7 +7,7 @@ from service.config import DBConfig
 
 
 def connect_string() -> str:
-    """string without driver"""
+    """string without a driver"""
     return (
         f"{DBConfig.DATABASE_USERNAME}:{DBConfig.DATABASE_PASSWORD}"
         f"@{DBConfig.POSTGRES_HOST}:{DBConfig.POSTGRES_PORT}/{DBConfig.DATABASE_NAME}"

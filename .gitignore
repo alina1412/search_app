@@ -10,3 +10,4 @@ htmlcov/*
 example_*
 
 **/posts.csv
+http_ca.crt
